@@ -1,7 +1,14 @@
 ///! Public interface to serial and vectorised version of black scholes pricing and related functionality
 use crate::bs_f32x8_;
 use bytemuck::cast;
+use wasm_bindgen::prelude::*;
 use wide::*;
+
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 /// A container for all the greeks
 #[derive(Debug)]
@@ -15,15 +22,17 @@ pub struct Greeks {
 }
 
 /// Specify whether an option is put or call
+#[wasm_bindgen]
 #[derive(PartialEq, Debug, Copy, Clone, PartialOrd)]
 pub enum OptionDir {
     CALL = 1,
-    PUT = -1,
+    PUT = 0,
 }
 
 /// Black Scholes call pricing. The results are at the same index as the inputs
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn bs_call(
     spot: &[f32],
     strike: &[f32],
@@ -58,6 +67,7 @@ pub fn bs_call(
 /// Black Scholes put pricing for arrays. The results are at the same index as the inputs
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn bs_put(
     spot: &[f32],
     strike: &[f32],
@@ -91,6 +101,7 @@ pub fn bs_put(
 /// Put delta
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn put_delta(
     spot: &[f32],
     strike: &[f32],
@@ -125,6 +136,7 @@ pub fn put_delta(
 /// Call delta
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn call_delta(
     spot: &[f32],
     strike: &[f32],
@@ -159,6 +171,7 @@ pub fn call_delta(
 /// Vega - is the same if call or put
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn vega(
     spot: &[f32],
     strike: &[f32],
@@ -192,6 +205,7 @@ pub fn vega(
 /// Gamma - is the same if call or put
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn gamma(
     spot: &[f32],
     strike: &[f32],
@@ -225,6 +239,7 @@ pub fn gamma(
 /// Call Theta
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn call_theta(
     spot: &[f32],
     strike: &[f32],
@@ -260,6 +275,7 @@ pub fn call_theta(
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
 /// The calculate for the put theta seems to have a number of different implementations. Bug fixes welcome
+#[wasm_bindgen]
 pub fn put_theta(
     spot: &[f32],
     strike: &[f32],
@@ -295,6 +311,7 @@ pub fn put_theta(
 /// Call rho
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn call_rho(
     spot: &[f32],
     strike: &[f32],
@@ -328,6 +345,7 @@ pub fn call_rho(
 /// Put rho
 /// Years to expiry should be expressed as a f32 such as 20 days is 20/252 = 0.79
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
+#[wasm_bindgen]
 pub fn put_rho(
     spot: &[f32],
     strike: &[f32],
@@ -363,6 +381,7 @@ pub fn put_rho(
 /// a two greeks it's faster to use this than the individual pricers
 /// However be aware the memory allocation cost for the results is the bottleneck and could slow things down
 /// if you do not have a large L1/L2 cache.
+#[wasm_bindgen]
 pub fn call_greeks(
     spot: &[f32],
     strike: &[f32],
@@ -422,6 +441,7 @@ pub fn call_greeks(
 /// a two greeks it's faster to use this than the individual pricers
 /// However be aware the memory allocation cost for the results is the bottleneck and could slow things down
 /// if you do not have a large L1/L2 cache.
+#[wasm_bindgen]
 pub fn put_greeks(
     spot: &[f32],
     strike: &[f32],
@@ -481,6 +501,7 @@ pub fn put_greeks(
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
 /// Note this is an iterative calculation as there is no closed form solution. It exits when all the values in the array have
 /// reached a stable number
+#[wasm_bindgen]
 pub fn call_implied_vol(
     price: &[f32],
     spot: &[f32],
@@ -517,6 +538,7 @@ pub fn call_implied_vol(
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
 /// Note this is an iterative calculation as there is no closed form solution. It exits when all the values in the array have
 /// reached a stable number
+#[wasm_bindgen]
 pub fn put_implied_vol(
     price: &[f32],
     spot: &[f32],
@@ -553,6 +575,7 @@ pub fn put_implied_vol(
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
 /// Note this is an iterative calculation as there is no closed form solution. It exits when all the values in the array have
 /// reached a stable number
+#[wasm_bindgen]
 pub fn call_implied_interest_rate(
     price: &[f32],
     spot: &[f32],
@@ -589,6 +612,7 @@ pub fn call_implied_interest_rate(
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
 /// Note this is an iterative calculation as there is no closed form solution. It exits when all the values in the array have
 /// reached a stable number
+#[wasm_bindgen]
 pub fn put_implied_interest_rate(
     price: &[f32],
     spot: &[f32],
@@ -627,6 +651,7 @@ pub fn put_implied_interest_rate(
 /// Risk free rate, volatility and dividend yield expressed as f32 with 1.0 = 100%. 0.2 = 20% etc
 /// Note this is an iterative calculation as there is no closed form solution. It exits when all the values in the array have
 /// reached a stable number
+#[wasm_bindgen]
 pub fn american_put(
     spot: &[f32],
     strike: &[f32],
@@ -672,6 +697,7 @@ pub fn american_put(
 }
 */
 /// Calculate the call strike from delta value given
+#[wasm_bindgen]
 pub fn call_strike_from_delta(
     delta: &[f32],
     spot: &[f32],
@@ -700,6 +726,7 @@ pub fn call_strike_from_delta(
 }
 
 /// Calculate the call strike from delta value given
+#[wasm_bindgen]
 pub fn put_strike_from_delta(
     delta: &[f32],
     spot: &[f32],
