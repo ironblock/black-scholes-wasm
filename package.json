@@ -6,5 +6,11 @@
   "repository": "git@github.com:ironblock/black-scholes-wasm.git",
   "author": "Corey Vixie",
   "license": "AGPL",
-  "private": false
+  "private": false,
+  "scripts": {
+    "rust:clean": "rm -rf ./rust/pkg",
+    "rust:compile": "wasm-pack build --out-name black-scholes-wasm ./rust",
+    "rust:optimize": "mv ./rust/pkg/black-scholes-wasm_bg.wasm ./rust/pkg/black-scholes-wasm_bg.unoptimized.wasm && wasm-opt -Oz -o ./rust/pkg/black-scholes-wasm_bg.wasm ./rust/pkg/black-scholes-wasm_bg.unoptimized.wasm",
+    "build": "yarn rust:clean && yarn rust:compile && yarn rust:optimize"
+  }
 }

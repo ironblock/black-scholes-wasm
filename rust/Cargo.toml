@@ -1,5 +1,5 @@
 [package]
-name = "black_scholes_pricer"
+name = "black_scholes_wasm"
 version = "0.2.1"
 authors = ["ronnie chowdhury <ronnie.c995@gmail.com>", "Corey Vixie <corey@vixie.enterprises"]
 edition = "2018"
@@ -14,7 +14,7 @@ keywords = ["option","pricing","simd","black","scholes"]
 wasm-opt = false
 
 [lib]
-name = "black_scholes_pricer"
+name = "black_scholes_wasm"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
