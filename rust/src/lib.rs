@@ -2,7 +2,7 @@
 ///! Scalar and Vectorised version of:
 ///!
 ///! * Black scholes
-///! * Greeks  
+///! * Greeks
 ///! * Binomial
 ///! * Implied vol
 ///! * Implied Interest rates
@@ -18,9 +18,15 @@
 ///! On an i5 7300HQ I'm seeing 100,000,000 prices calculated per second.  YMMV
 ///!
 ///! Compared to a serialised version of around 1800ms
+extern crate console_error_panic_hook;
+use std::panic;
 
 pub mod bs;
 mod bs_f32x8_;
 pub mod bs_single;
 pub use bs::*;
 pub use bs_single::*;
+
+pub fn enable_error_logging() {
+  panic::set_hook(Box::new(console_error_panic_hook::hook));
+}
