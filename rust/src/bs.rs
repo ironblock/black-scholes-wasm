@@ -11,22 +11,38 @@ use wide::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 /// A container for all the greeks
+#[wasm_bindgen]
 #[derive(Debug)]
 pub struct Greeks {
-    pub pv: Vec<f32>,
-    pub delta: Vec<f32>,
-    pub theta: Vec<f32>,
-    pub gamma: Vec<f32>,
-    pub rho: Vec<f32>,
-    pub vega: Vec<f32>,
+    pv: Box<[f32]>,
+    delta: Box<[f32]>,
+    theta: Box<[f32]>,
+    gamma: Box<[f32]>,
+    rho: Box<[f32]>,
+    vega: Box<[f32]>,
+}
+
+#[wasm_bindgen]
+impl Greeks {
+    pub fn get(self, property: &str) -> Box<[f32]> {
+        match property {
+            "pv" => self.pv,
+            "delta" => self.delta,
+            "theta" => self.theta,
+            "gamma" => self.gamma,
+            "rho" => self.rho,
+            "vega" => self.vega,
+            _ => panic!("unknown field"),
+        }
+    }
 }
 
 /// Specify whether an option is put or call
 #[wasm_bindgen]
 #[derive(PartialEq, Debug, Copy, Clone, PartialOrd)]
 pub enum OptionDir {
-    CALL = 1,
     PUT = 0,
+    CALL = 1,
 }
 
 /// Black Scholes call pricing. The results are at the same index as the inputs
