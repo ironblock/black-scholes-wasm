@@ -14,17 +14,17 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[wasm_bindgen]
 #[derive(Debug)]
 pub struct Greeks {
-    pv: Box<[f32]>,
-    delta: Box<[f32]>,
-    theta: Box<[f32]>,
-    gamma: Box<[f32]>,
-    rho: Box<[f32]>,
-    vega: Box<[f32]>,
+    pv: Vec<f32>,
+    delta: Vec<f32>,
+    theta: Vec<f32>,
+    gamma: Vec<f32>,
+    rho: Vec<f32>,
+    vega: Vec<f32>,
 }
 
 #[wasm_bindgen]
 impl Greeks {
-    pub fn get(self, property: &str) -> Box<[f32]> {
+    pub fn get(self, property: &str) -> Vec<f32> {
         match property {
             "pv" => self.pv,
             "delta" => self.delta,
@@ -443,12 +443,12 @@ pub fn call_greeks(
         pv_res.extend(&pv);
     }
     Greeks {
-        pv: pv_res.into_boxed_slice(),
-        delta: delta_res.into_boxed_slice(),
-        vega: vega_res.into_boxed_slice(),
-        gamma: gamma_res.into_boxed_slice(),
-        theta: theta_res.into_boxed_slice(),
-        rho: rho_res.into_boxed_slice(),
+        pv: pv_res,
+        delta: delta_res,
+        vega: vega_res,
+        gamma: gamma_res,
+        theta: theta_res,
+        rho: rho_res,
     }
 }
 
@@ -503,12 +503,12 @@ pub fn put_greeks(
         pv_res.extend(&pv);
     }
     Greeks {
-        pv: pv_res.into_boxed_slice(),
-        delta: delta_res.into_boxed_slice(),
-        vega: vega_res.into_boxed_slice(),
-        theta: theta_res.into_boxed_slice(),
-        gamma: gamma_res.into_boxed_slice(),
-        rho: rho_res.into_boxed_slice(),
+        pv: pv_res,
+        delta: delta_res,
+        vega: vega_res,
+        theta: theta_res,
+        gamma: gamma_res,
+        rho: rho_res,
     }
 }
 
