@@ -1,0 +1,10 @@
+{
+  "name": "black-scholes-wasm",
+  "version": "0.0.1",
+  "description": "A binary WebAssembly port of Ronnie C.'s excellent SIMD options pricer",
+  "main": "index.js",
+  "repository": "git@github.com:ironblock/black-scholes-wasm.git",
+  "author": "Corey Vixie",
+  "license": "AGPL",
+  "private": false
+}

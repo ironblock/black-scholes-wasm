@@ -1,0 +1,7 @@
+*~
+**/bin
+**/pkg
+**/target
+**/*.rs.bk
+**/.history
+Cargo.lock
