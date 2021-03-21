@@ -1,7 +1,7 @@
 [package]
 name = "black_scholes_pricer"
 version = "0.2.1"
-authors = ["ronnie chowdhury <ronnie.c995@gmail.com>"]
+authors = ["ronnie chowdhury <ronnie.c995@gmail.com>", "Corey Vixie <corey@vixie.enterprises"]
 edition = "2018"
 description = "Scalar and SIMD vectorised versions of black scholes and binomial option pricing"
 license = "AGPL-3.0-or-later"
@@ -10,19 +10,23 @@ documentation = "https://docs.rs/black_scholes_simd"
 readme = "README.md"
 keywords = ["option","pricing","simd","black","scholes"]
 
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
 [lib]
 name = "black_scholes_pricer"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-wide= "0.5"
 bytemuck = "^1"
 wasm-bindgen = "0.2"
+wide= "0.5"
 
 [profile.dev]
 opt-level = 0
 debug = 2
 
 [profile.release]
+lto = true
 opt-level = 3
 debug = 0
