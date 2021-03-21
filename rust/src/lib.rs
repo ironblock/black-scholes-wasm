@@ -18,6 +18,7 @@
 ///! On an i5 7300HQ I'm seeing 100,000,000 prices calculated per second.  YMMV
 ///!
 ///! Compared to a serialised version of around 1800ms
+
 pub mod bs;
 mod bs_f32x8_;
 pub mod bs_single;

@@ -1,6 +1,6 @@
-///! Public interface to serial and vectorised version of black scholes pricing and related functionality
 use crate::bs_f32x8_;
 use bytemuck::cast;
+///! Public interface to serial and vectorised version of black scholes pricing and related functionality
 use wasm_bindgen::prelude::*;
 use wide::*;
 
@@ -44,7 +44,7 @@ pub fn bs_call(
     // Make everything f32x8
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(1);
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -78,7 +78,7 @@ pub fn bs_put(
 ) -> Vec<f32> {
     let mut res = Vec::with_capacity(spot.len());
     let max_idx = spot.len();
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -112,7 +112,7 @@ pub fn put_delta(
 ) -> Vec<f32> {
     let mut res = Vec::with_capacity(spot.len());
     let max_idx = spot.len();
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -147,7 +147,7 @@ pub fn call_delta(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -182,7 +182,7 @@ pub fn vega(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -216,7 +216,7 @@ pub fn gamma(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -250,7 +250,7 @@ pub fn call_theta(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -286,7 +286,7 @@ pub fn put_theta(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -322,7 +322,7 @@ pub fn call_rho(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -356,7 +356,7 @@ pub fn put_rho(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -391,13 +391,13 @@ pub fn call_greeks(
     years_to_expiry: &[f32],
 ) -> Greeks {
     let max_idx = spot.len();
-    let mut delta_res = Vec::with_capacity(spot.len());
-    let mut vega_res = Vec::with_capacity(spot.len());
-    let mut theta_res = Vec::with_capacity(spot.len());
-    let mut gamma_res = Vec::with_capacity(spot.len());
-    let mut rho_res = Vec::with_capacity(spot.len());
-    let mut pv_res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    let mut delta_res = Vec::with_capacity(max_idx);
+    let mut vega_res = Vec::with_capacity(max_idx);
+    let mut theta_res = Vec::with_capacity(max_idx);
+    let mut gamma_res = Vec::with_capacity(max_idx);
+    let mut rho_res = Vec::with_capacity(max_idx);
+    let mut pv_res = Vec::with_capacity(max_idx);
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -427,12 +427,12 @@ pub fn call_greeks(
         pv_res.extend(&pv);
     }
     Greeks {
-        pv: pv_res,
-        delta: delta_res,
-        vega: vega_res,
-        gamma: gamma_res,
-        theta: theta_res,
-        rho: rho_res,
+        pv: pv_res.into_boxed_slice(),
+        delta: delta_res.into_boxed_slice(),
+        vega: vega_res.into_boxed_slice(),
+        gamma: gamma_res.into_boxed_slice(),
+        theta: theta_res.into_boxed_slice(),
+        rho: rho_res.into_boxed_slice(),
     }
 }
 
@@ -451,13 +451,13 @@ pub fn put_greeks(
     years_to_expiry: &[f32],
 ) -> Greeks {
     let max_idx = spot.len();
-    let mut delta_res = Vec::with_capacity(spot.len());
-    let mut vega_res = Vec::with_capacity(spot.len());
-    let mut theta_res = Vec::with_capacity(spot.len());
-    let mut gamma_res = Vec::with_capacity(spot.len());
-    let mut rho_res = Vec::with_capacity(spot.len());
-    let mut pv_res = Vec::with_capacity(spot.len());
-    for i in (0..spot.len()).step_by(8) {
+    let mut delta_res = Vec::with_capacity(max_idx);
+    let mut vega_res = Vec::with_capacity(max_idx);
+    let mut theta_res = Vec::with_capacity(max_idx);
+    let mut gamma_res = Vec::with_capacity(max_idx);
+    let mut rho_res = Vec::with_capacity(max_idx);
+    let mut pv_res = Vec::with_capacity(max_idx);
+    for i in (0..max_idx).step_by(8) {
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
         let years_to_expiry = f32x8::from(&years_to_expiry[i..std::cmp::min(max_idx, i + 8)]);
@@ -487,12 +487,12 @@ pub fn put_greeks(
         pv_res.extend(&pv);
     }
     Greeks {
-        pv: pv_res,
-        delta: delta_res,
-        vega: vega_res,
-        theta: theta_res,
-        gamma: gamma_res,
-        rho: rho_res,
+        pv: pv_res.into_boxed_slice(),
+        delta: delta_res.into_boxed_slice(),
+        vega: vega_res.into_boxed_slice(),
+        theta: theta_res.into_boxed_slice(),
+        gamma: gamma_res.into_boxed_slice(),
+        rho: rho_res.into_boxed_slice(),
     }
 }
 
@@ -512,7 +512,7 @@ pub fn call_implied_vol(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut irvol = Vec::with_capacity(price.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let price = f32x8::from(&price[i..std::cmp::min(max_idx, i + 8)]);
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
@@ -549,7 +549,7 @@ pub fn put_implied_vol(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut irvol = Vec::with_capacity(price.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let price = f32x8::from(&price[i..std::cmp::min(max_idx, i + 8)]);
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
@@ -586,7 +586,7 @@ pub fn call_implied_interest_rate(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut irres = Vec::with_capacity(price.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let price = f32x8::from(&price[i..std::cmp::min(max_idx, i + 8)]);
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
@@ -623,7 +623,7 @@ pub fn put_implied_interest_rate(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut irres = Vec::with_capacity(price.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let price = f32x8::from(&price[i..std::cmp::min(max_idx, i + 8)]);
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let strike = f32x8::from(&strike[i..std::cmp::min(max_idx, i + 8)]);
@@ -707,7 +707,7 @@ pub fn call_strike_from_delta(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut cs = Vec::with_capacity(delta.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let delta = f32x8::from(&delta[i..std::cmp::min(max_idx, i + 8)]);
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let risk_free_rate = f32x8::from(&risk_free_rate[i..std::cmp::min(max_idx, i + 8)]);
@@ -736,7 +736,7 @@ pub fn put_strike_from_delta(
 ) -> Vec<f32> {
     let max_idx = spot.len();
     let mut ps = Vec::with_capacity(delta.len());
-    for i in (0..spot.len()).step_by(8) {
+    for i in (0..max_idx).step_by(8) {
         let delta = f32x8::from(&delta[i..std::cmp::min(max_idx, i + 8)]);
         let spot = f32x8::from(&spot[i..std::cmp::min(max_idx, i + 8)]);
         let risk_free_rate = f32x8::from(&risk_free_rate[i..std::cmp::min(max_idx, i + 8)]);
