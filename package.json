@@ -2,15 +2,22 @@
   "name": "black-scholes-wasm",
   "version": "0.0.1",
   "description": "A binary WebAssembly port of Ronnie C.'s excellent SIMD options pricer",
-  "main": "index.js",
   "repository": "git@github.com:ironblock/black-scholes-wasm.git",
   "author": "Corey Vixie",
-  "license": "AGPL",
+  "license": "AGPL-3.0-or-later",
   "private": false,
   "scripts": {
-    "rust:clean": "rm -rf ./rust/pkg",
-    "rust:compile": "wasm-pack build --out-name black-scholes-wasm ./rust",
-    "rust:optimize": "mv ./rust/pkg/black-scholes-wasm_bg.wasm ./rust/pkg/black-scholes-wasm_bg.unoptimized.wasm && wasm-opt -Oz -o ./rust/pkg/black-scholes-wasm_bg.wasm ./rust/pkg/black-scholes-wasm_bg.unoptimized.wasm",
+    "rust:clean": "rm -rf ./dist",
+    "rust:compile": "wasm-pack build --out-name black-scholes-wasm --out-dir ../dist ./rust",
+    "rust:optimize": "mv ./dist/black-scholes-wasm_bg.wasm ./dist/black-scholes-wasm_bg.unoptimized.wasm && wasm-opt -Oz -o ./dist/black-scholes-wasm_bg.wasm ./dist/black-scholes-wasm_bg.unoptimized.wasm",
     "build": "yarn rust:clean && yarn rust:compile && yarn rust:optimize"
-  }
+  },
+  "files": [
+    "./dist/black-scholes-wasm_bg.wasm",
+    "./dist/black-scholes-wasm.js",
+    "./dist/black-scholes-wasm.d.ts"
+  ],
+  "module": "./dist/black-scholes-wasm.js",
+  "types": "./dist/black-scholes-wasm.d.ts",
+  "sideEffects": false
 }
