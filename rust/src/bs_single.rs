@@ -477,7 +477,7 @@ pub fn implied_vol(
         );
         dbg!(&derivative);
 
-        let diff = (option_value - price);
+        let diff = option_value - price;
         if diff.abs() < 0.0001 {
             break;
         }
