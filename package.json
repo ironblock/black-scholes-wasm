@@ -1,6 +1,6 @@
 {
   "name": "black-scholes-wasm",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "A binary WebAssembly port of Ronnie C.'s excellent SIMD options pricer",
   "repository": "git@github.com:ironblock/black-scholes-wasm.git",
   "author": "Corey Vixie",
@@ -8,16 +8,18 @@
   "private": false,
   "scripts": {
     "rust:clean": "rm -rf ./dist",
-    "rust:compile": "wasm-pack build --out-name black-scholes-wasm --out-dir ../dist ./rust",
-    "rust:optimize": "mv ./dist/black-scholes-wasm_bg.wasm ./dist/black-scholes-wasm_bg.unoptimized.wasm && wasm-opt -Oz -o ./dist/black-scholes-wasm_bg.wasm ./dist/black-scholes-wasm_bg.unoptimized.wasm",
-    "build": "yarn rust:clean && yarn rust:compile && yarn rust:optimize"
+    "rust:compile-pack": "wasm-pack build --target nodejs --release --out-name black-scholes-wasm --out-dir ../dist ./rust",
+    "rust:declutter": "find ./dist -type f -not \\( -name \"*.wasm\" -o -name \"*.ts\" -o -name \"*.js\" \\) -exec rm {} \";\"",
+    "rust:optimize": "mv ./dist/black-scholes-wasm_bg.wasm /tmp/black-scholes-wasm_bg.unoptimized.wasm && wasm-opt -Oz -o ./dist/black-scholes-wasm_bg.wasm /tmp/black-scholes-wasm_bg.unoptimized.wasm",
+    "build": "yarn rust:clean && yarn rust:compile-pack && yarn rust:optimize && yarn rust:declutter",
+    "prepare": "yarn build"
   },
   "files": [
-    "./dist/black-scholes-wasm_bg.wasm",
-    "./dist/black-scholes-wasm.js",
-    "./dist/black-scholes-wasm.d.ts"
+    "dist/black-scholes-wasm_bg.wasm",
+    "dist/black-scholes-wasm.js",
+    "dist/black-scholes-wasm.d.ts"
   ],
-  "module": "./dist/black-scholes-wasm.js",
-  "types": "./dist/black-scholes-wasm.d.ts",
+  "main": "dist/black-scholes-wasm.js",
+  "types": "dist/black-scholes-wasm.d.ts",
   "sideEffects": false
 }
